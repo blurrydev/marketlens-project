@@ -6,7 +6,7 @@ from langchain_core.messages import HumanMessage
 
 class MarketLensRAG:
 
-    def __init__(self, temp=0.0, user_api_key : str):
+    def __init__(self, user_api_key : str, temp=0.0):
         self.api_key = user_api_key
 
         if not self.api_key:

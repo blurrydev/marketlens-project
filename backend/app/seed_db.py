@@ -1,17 +1,17 @@
 import os
 import glob
 from data_pipeline.data_ingestion import DocumentProcessor
-from rag_engine.rag_engine import VectorStore
+from rag_engine.vector_store import VectorStore
 
 def main():
     print("--- Starting MarketLens Database Updation with new data ---")
 
 
     data_dir = "../data/"
-    log_file = os.join.path(data_dir, "ingested_log.txt")
+    log_file = os.path.join(data_dir, "ingested_log.txt")
 
 
-    os.makedirs(data_dir, exists_ok = True)
+    os.makedirs(data_dir, exist_ok = True)
 
     ingested_files = set()
     if os.path.exists(log_file):
@@ -46,18 +46,18 @@ def main():
 
     try:
         with open(log_file, "a") as log:
-        for pdf_path in new_pdfs:
-            filename = od.path.basename(pdf_path)
-            print(f"\n[PROCESSING]: {filename}")
+            for pdf_path in new_pdfs:
+                filename = os.path.basename(pdf_path)
+                print(f"\n[PROCESSING]: {filename}")
 
-            raw_docs = processor.load_pdf(pdf_path)
-            chunks = processor.process_documents(raw_docs)
+                raw_docs = processor.load_pdf(pdf_path)
+                chunks = processor.process_document(raw_docs)
 
 
-            db_manager.build_database(chunks)
+                db_manager.build_database(chunks)
 
-            log.write(f"{filename}")
-            print(f"[SUCCESS]: {filename} loaded into ChromaDB")
+                log.write(f"{filename}")
+                print(f"[SUCCESS]: {filename} loaded into ChromaDB")
 
         print("--- Smart updation Complete ---")
 

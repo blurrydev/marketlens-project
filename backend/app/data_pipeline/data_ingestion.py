@@ -15,7 +15,7 @@ class DocumentProcessor:
             chunk_overlap = self.chunk_overlap
         )
 
-    def load_pdf(self, file_path: str) --> List[Document]:
+    def load_pdf(self, file_path: str) -> List[Document]:
 
         # Make sure that the file path exists
 
@@ -33,7 +33,7 @@ class DocumentProcessor:
             print(f"Failed to load PDF. Error: {e}")
 
 
-    def process_document(self, documents: List[Document]) --> List[Document]:
+    def process_document(self, documents: List[Document]) -> List[Document]:
 
         # Check if documents exists before starting the pipeline
 

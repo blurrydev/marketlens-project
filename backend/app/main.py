@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -76,13 +77,17 @@ def chat_endpoint(request: ChatRequest, x_api_key: str = Header(...)):
 
     try:
         print(f"Received question: {request.question}")
-        retrieved_texts = vector_db.search(query=request.question, n_results=3)
+        retrived_texts = vector_db.search(query=request.question, n_results=3)
+        
+        if retrived_texts is None:
+            return ChatResponse(answer="I could not find any relevant sources to answer this question", sources_count="0")
 
         rag_engine = MarketLensRAG(user_api_key=x_api_key)
 
-        answer = rag_engine.generate_answer(query=request.question, retrieved_contexts=retrieved_texts)
 
-        return ChatResponse(answer=answer, sources_count=len(retrieved_texts))
+        answer = rag_engine.generate_answer(query=request.question, retrived_contexts=retrived_texts)
+
+        return ChatResponse(answer=answer, sources_count=str(len(retrived_texts)))
 
     except ValueError as ve:
         raise HTTPException(
@@ -95,3 +100,6 @@ def chat_endpoint(request: ChatRequest, x_api_key: str = Header(...)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
             detail="An error occurred while generating the response."
         )
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

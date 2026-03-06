@@ -3,7 +3,7 @@ import uuid
 import chromadb
 from typing import List
 from sentence_transformers import SentenceTransformer
-from langchain.core import Document
+from langchain_core.documents import Document
 
 class VectorStore:
 
@@ -58,7 +58,7 @@ class VectorStore:
         print(f"Success! Collection now contains {self.collection.count()} items.")
 
 
-    def search(self, query: str, n_results: int = 3) --> List[str]:
+    def search(self, query: str, n_results: int = 3) -> List[str]:
 
         print(f"Received query: {query}.")
         
@@ -73,4 +73,6 @@ class VectorStore:
         if not results['documents'] or not results['documents'][0]:
             print("INFO: No matching documents found")
             return []
+        
+        return results['documents'][0]
 
